@@ -337,31 +337,27 @@ const VMMigrationDetails: React.FunctionComponent = () => {
         >
           <Card>
             <CardBody>
-              <Split>
-                <SplitItem isFilled>
-                  <FilterToolbar<IVMStatus>
-                    filterCategories={filterCategories}
-                    filterValues={filterValues}
-                    setFilterValues={setFilterValues}
-                    toolbarItems={
-                      <Button
-                        variant="secondary"
-                        isDisabled={selectedItems.length === 0 || cancelVMsMutation.isLoading}
-                        onClick={toggleCancelModal}
-                      >
-                        Cancel
-                      </Button>
-                    }
-                  />
-                </SplitItem>
-                <SplitItem>
+              <FilterToolbar<IVMStatus>
+                filterCategories={filterCategories}
+                filterValues={filterValues}
+                setFilterValues={setFilterValues}
+                toolbarItems={
+                  <Button
+                    variant="secondary"
+                    isDisabled={selectedItems.length === 0 || cancelVMsMutation.isLoading}
+                    onClick={toggleCancelModal}
+                  >
+                    Cancel
+                  </Button>
+                }
+                pagination={
                   <Pagination
                     className={spacing.mtMd}
                     {...paginationProps}
                     widgetId="migration-vms-table-pagination-top"
                   />
-                </SplitItem>
-              </Split>
+                }
+              />
               {filteredItems.length > 0 ? (
                 <Table
                   className="migration-details-table"
@@ -380,7 +376,7 @@ const VMMigrationDetails: React.FunctionComponent = () => {
                       toggleItemSelected(rowData.meta.vmStatus, isSelected);
                     }
                   }}
-                  canSelectAll={cancelableVMs.length > 0}
+                  canSelectAll={false}
                 >
                   <TableHeader />
                   <TableBody />

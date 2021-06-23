@@ -5,8 +5,12 @@ import {
   Text,
   Level,
   LevelItem,
-  Split,
-  SplitItem,
+  Button,
+  Dropdown,
+  DropdownToggle,
+  DropdownToggleCheckbox,
+  DropdownItem,
+  DropdownSeparator,
 } from '@patternfly/react-core';
 import spacing from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import {
@@ -216,10 +220,11 @@ const SelectVMsForm: React.FunctionComponent<ISelectVMsFormProps> = ({
   const { currentPageItems, setPageNumber, paginationProps } = usePaginationState(sortedItems, 10);
   React.useEffect(() => setPageNumber(1), [sortBy, setPageNumber]);
 
-  const { isItemSelected, toggleItemSelected, selectAll } = useSelectionState<string>({
-    items: sortedItems.map((vm) => vm.id),
-    externalState: [form.fields.selectedVMIds.value, form.fields.selectedVMIds.setValue],
-  });
+  const { isItemSelected, toggleItemSelected, selectAll, setSelectedItems } =
+    useSelectionState<string>({
+      items: sortedItems.map((vm) => vm.id),
+      externalState: [form.fields.selectedVMIds.value, form.fields.selectedVMIds.setValue],
+    });
 
   const { toggleItemSelected: toggleVMExpanded, isItemSelected: isVMExpanded } =
     useSelectionState<SourceVM>({
@@ -294,6 +299,61 @@ const SelectVMsForm: React.FunctionComponent<ISelectVMsFormProps> = ({
     }
   });
 
+  const handleSelectAll = (checked: boolean) => {
+    selectAll(!!checked);
+  };
+
+  const allRowsSelected = () => rows.filter((row) => row.selected).length === rows.length;
+  const noRowsSelected = () => rows.filter((row) => row.selected).length === 0;
+
+  const [bulkSelectOpen, setBulkSelectOpen] = React.useState(false);
+
+  const dropdownItems = [
+    <DropdownItem
+      onClick={() => {
+        handleSelectAll(false);
+      }}
+      data-action="none"
+      key="select-none"
+      component="button"
+    >
+      Select none (0)
+    </DropdownItem>,
+    <DropdownItem
+      onClick={() => {
+        console.log('currentPageItems', currentPageItems);
+        setSelectedItems(currentPageItems);
+      }}
+      data-action="page"
+      key="select-page"
+      component="button"
+    >
+      Select page ({currentPageItems.length})
+    </DropdownItem>,
+    <DropdownItem
+      onClick={() => {
+        handleSelectAll(true);
+      }}
+      data-action="all"
+      key="select-all"
+      component="button"
+    >
+      Select all ({paginationProps.itemCount})
+    </DropdownItem>,
+  ];
+
+  const getBulkSelectState = () => {
+    let state: boolean | null;
+    if (allRowsSelected()) {
+      state = true;
+    } else if (noRowsSelected()) {
+      state = false;
+    } else {
+      state = null;
+    }
+    return state;
+  };
+
   return (
     <ResolvedQueries
       results={[
@@ -323,24 +383,54 @@ const SelectVMsForm: React.FunctionComponent<ISelectVMsFormProps> = ({
               analytics service.
             </Text>
           </TextContent>
-          <Split>
-            <SplitItem isFilled>
-              <FilterToolbar<SourceVM>
-                filterCategories={filterCategories}
-                filterValues={filterValues}
-                setFilterValues={setFilterValues}
-              />
-            </SplitItem>
-            <SplitItem>
+          <FilterToolbar<SourceVM>
+            filterCategories={filterCategories}
+            filterValues={filterValues}
+            setFilterValues={setFilterValues}
+            toolbarItems={
+              <>
+                <Dropdown
+                  onSelect={(event) => {
+                    console.log(event?.currentTarget);
+                  }}
+                  toggle={
+                    <DropdownToggle
+                      splitButtonItems={[
+                        <DropdownToggleCheckbox
+                          id="bulk-selected-vms-checkbox"
+                          key="bulk-select-checkbox"
+                          aria-label="Select all"
+                          onChange={(checked) => {
+                            if (getBulkSelectState() !== false) {
+                              selectAll(false);
+                            } else {
+                              selectAll(true);
+                            }
+                          }}
+                          isChecked={getBulkSelectState()}
+                        />,
+                      ]}
+                      onToggle={(isOpen) => {
+                        setBulkSelectOpen(isOpen);
+                      }}
+                    />
+                  }
+                  isOpen={bulkSelectOpen}
+                  dropdownItems={dropdownItems}
+                />
+              </>
+            }
+            pagination={
               <Pagination
                 className={spacing.mtMd}
                 {...paginationProps}
                 widgetId="vms-table-pagination-top"
               />
-            </SplitItem>
-          </Split>
+            }
+          />
           {filteredItems.length > 0 ? (
             <Table
+              canSelectAll={false}
               aria-label="VMware VMs table"
               variant={TableVariant.compact}
               cells={columns}
@@ -348,11 +438,7 @@ const SelectVMsForm: React.FunctionComponent<ISelectVMsFormProps> = ({
               sortBy={sortBy}
               onSort={onSort}
               onSelect={(_event, isSelected, rowIndex, rowData) => {
-                if (rowIndex === -1) {
-                  selectAll(isSelected);
-                } else {
-                  toggleItemSelected(rowData.meta.vm.id, isSelected);
-                }
+                toggleItemSelected(rowData.meta.vm.id, isSelected);
               }}
               onCollapse={(_event, _rowKey, _isOpen, rowData) => {
                 toggleVMExpanded(rowData.meta.vm);

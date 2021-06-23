@@ -51,6 +51,7 @@ export interface IFilterToolbarProps<T> {
   filterValues: IFilterValues;
   setFilterValues: (values: IFilterValues) => void;
   toolbarItems?: JSX.Element;
+  pagination?: JSX.Element;
 }
 
 export const FilterToolbar = <T,>({
@@ -58,6 +59,7 @@ export const FilterToolbar = <T,>({
   filterValues,
   setFilterValues,
   toolbarItems,
+  pagination,
 }: React.PropsWithChildren<IFilterToolbarProps<T>>): JSX.Element | null => {
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = React.useState(false);
   const [currentCategoryKey, setCurrentCategoryKey] = React.useState(filterCategories[0].key);
@@ -75,7 +77,11 @@ export const FilterToolbar = <T,>({
   );
 
   return (
-    <Toolbar id="pv-table-filter-toolbar" clearAllFilters={() => setFilterValues({})}>
+    <Toolbar
+      style={{ border: '1px solid red' }}
+      id="pv-table-filter-toolbar"
+      clearAllFilters={() => setFilterValues({})}
+    >
       <ToolbarContent>
         <ToolbarToggleGroup variant="filter-group" toggleIcon={<FilterIcon />} breakpoint="2xl">
           <ToolbarItem>
@@ -110,6 +116,8 @@ export const FilterToolbar = <T,>({
             <ToolbarItem>{toolbarItems}</ToolbarItem>
           </ToolbarGroup>
         )}
+
+        {pagination && <ToolbarItem variant="pagination">{pagination}</ToolbarItem>}
       </ToolbarContent>
     </Toolbar>
   );

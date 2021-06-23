@@ -359,23 +359,20 @@ const PlansTable: React.FunctionComponent<IPlansTableProps> = ({
 
   return (
     <>
-      <Split>
-        <SplitItem isFilled>
-          <FilterToolbar<IPlan>
-            filterCategories={filterCategories}
-            filterValues={filterValues}
-            setFilterValues={setFilterValues}
-            toolbarItems={<CreatePlanButton variant="secondary" />}
-          />
-        </SplitItem>
-        <SplitItem>
+      <FilterToolbar<IPlan>
+        filterCategories={filterCategories}
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
+        toolbarItems={<CreatePlanButton variant="secondary" />}
+        pagination={
           <Pagination
             className={spacing.mtMd}
             {...paginationProps}
             widgetId="plans-table-pagination-top"
           />
-        </SplitItem>
-      </Split>
+        }
+      />
+
       {filteredItems.length > 0 ? (
         <Table
           aria-label="Migration Plans table"
