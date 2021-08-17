@@ -74,7 +74,7 @@ export const useCreateProviderMutation = (
 > => {
   const client = useAuthorizedK8sClient();
   const queryClient = useQueryClient();
-  const { pollFasterAfterMutation } = usePollingContext();
+  // const { pollFasterAfterMutation } = usePollingContext();
 
   const postProvider = async (values: AddProviderFormValues) => {
     const providerWithoutSecret: IProviderObject = convertFormValuesToProvider(
@@ -184,7 +184,7 @@ export const useCreateProviderMutation = (
     onSuccess: () => {
       queryClient.invalidateQueries('cluster-providers');
       queryClient.invalidateQueries('inventory-providers');
-      pollFasterAfterMutation();
+      // pollFasterAfterMutation();
       onSuccess(providerType);
     },
   });
@@ -202,7 +202,7 @@ export const usePatchProviderMutation = (
 > => {
   const client = useAuthorizedK8sClient();
   const queryClient = useQueryClient();
-  const { pollFasterAfterMutation } = usePollingContext();
+  // const { pollFasterAfterMutation } = usePollingContext();
 
   const patchProvider = async (values: AddProviderFormValues) => {
     const providerWithoutSecret: IProviderObject = convertFormValuesToProvider(
@@ -237,7 +237,7 @@ export const usePatchProviderMutation = (
     onSuccess: () => {
       queryClient.invalidateQueries('cluster-providers');
       queryClient.invalidateQueries('inventory-providers');
-      pollFasterAfterMutation();
+      // pollFasterAfterMutation();
       onSuccess && onSuccess();
     },
   });

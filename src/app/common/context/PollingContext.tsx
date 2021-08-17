@@ -1,14 +1,14 @@
 import {
-  AFTER_MUTATION_WINDOW,
+  // AFTER_MUTATION_WINDOW,
   POLLING_INTERVAL,
-  POLLING_INTERVAL_AFTER_MUTATION,
+  // POLLING_INTERVAL_AFTER_MUTATION,
 } from '@app/queries/constants';
 import * as React from 'react';
 
 interface IPollingContext {
   isPollingEnabled: boolean;
   refetchInterval: number | false;
-  pollFasterAfterMutation: () => void;
+  // pollFasterAfterMutation: () => void;
   pausePolling: () => void;
   resumePolling: () => void;
 }
@@ -16,7 +16,7 @@ interface IPollingContext {
 const PollingContext = React.createContext<IPollingContext>({
   isPollingEnabled: true,
   refetchInterval: false,
-  pollFasterAfterMutation: () => undefined,
+  // pollFasterAfterMutation: () => undefined,
   pausePolling: () => undefined,
   resumePolling: () => undefined,
 });
@@ -29,31 +29,31 @@ export const PollingContextProvider: React.FunctionComponent<IPollingContextProv
   children,
 }: IPollingContextProviderProps) => {
   const [isPollingEnabled, setIsPollingEnabled] = React.useState(true);
-  const [isJustAfterMutation, setIsJustAfterMutation] = React.useState(false);
+  // const [isJustAfterMutation, setIsJustAfterMutation] = React.useState(false);
 
   const refetchInterval = !isPollingEnabled
     ? false
-    : isJustAfterMutation
-    ? POLLING_INTERVAL_AFTER_MUTATION
-    : POLLING_INTERVAL;
+    : // : isJustAfterMutation
+      // ? POLLING_INTERVAL_AFTER_MUTATION
+      POLLING_INTERVAL;
 
-  const timeoutRef = React.useRef<number | null>(null);
+  // const timeoutRef = React.useRef<number | null>(null);
 
-  const pollFasterAfterMutation = () => {
-    setIsJustAfterMutation(true);
-    if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-    timeoutRef.current = window.setTimeout(
-      () => setIsJustAfterMutation(false),
-      AFTER_MUTATION_WINDOW
-    );
-  };
+  // const pollFasterAfterMutation = () => {
+  //   setIsJustAfterMutation(true);
+  //   if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+  //   timeoutRef.current = window.setTimeout(
+  //     () => setIsJustAfterMutation(false),
+  //     AFTER_MUTATION_WINDOW
+  //   );
+  // };
 
   return (
     <PollingContext.Provider
       value={{
         isPollingEnabled,
         refetchInterval,
-        pollFasterAfterMutation,
+        // pollFasterAfterMutation,
         pausePolling: () => setIsPollingEnabled(false),
         resumePolling: () => setIsPollingEnabled(true),
       }}

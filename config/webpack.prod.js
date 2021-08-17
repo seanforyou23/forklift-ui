@@ -5,12 +5,12 @@ const { stylePaths } = require('./stylePaths');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 
-module.exports = merge(common('production'), {
-  mode: 'production',
+module.exports = merge(common('development'), {
+  mode: 'development',
   devtool: 'source-map',
   optimization: {
     minimizer: [
-      new TerserJSPlugin({}),
+      // new TerserJSPlugin({}),
     ],
   },
   plugins: [
