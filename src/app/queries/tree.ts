@@ -28,6 +28,7 @@ export interface IndexedTree<T extends InventoryTree = InventoryTree> {
 }
 
 export const indexTree = <T extends InventoryTree>(tree: T): IndexedTree<T> => {
+  console.log('indexingTree', tree.children && tree.children.length, performance.now(), '------------');
   const sortedTree = sortTreeItemsByName(tree);
   const vmSelfLinks: string[] = [];
   const ancestorsBySelfLink: Record<string, T[] | undefined> = {};
@@ -63,6 +64,7 @@ export const indexTree = <T extends InventoryTree>(tree: T): IndexedTree<T> => {
       : node.children?.flatMap((child: InventoryTree) => getDescendants(child, true)) || [];
     return includeSelf ? [node, ...descendants] : descendants;
   };
+  console.log('finished indexingTree', performance.now());
   return {
     tree: sortedTree,
     flattenedNodes: walk(sortedTree),
@@ -93,6 +95,8 @@ export const useInventoryTreeQuery = <T extends InventoryTree>(
       enabled: isValidQuery && !!provider,
       refetchInterval: usePollingContext().refetchInterval,
       select: indexTree,
+      // refetchOnWindowFocus: false,
+      // refetchOnMount: false
     },
     (treeType === InventoryTreeType.Cluster
       ? provider?.type === 'vsphere'

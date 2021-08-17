@@ -1,4 +1,4 @@
-export const POLLING_INTERVAL = process.env.NODE_ENV !== 'production' ? 15000 : 10000;
+export const POLLING_INTERVAL = 10000;
 // export const POLLING_INTERVAL_AFTER_MUTATION = 2000;
 // export const AFTER_MUTATION_WINDOW = 6000;
 

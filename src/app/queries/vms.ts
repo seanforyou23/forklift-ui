@@ -20,13 +20,16 @@ const findVMsInRecord = (record: SourceVMsRecord, keys: string[]) =>
   keys.flatMap((key) => (record[key] ? [record[key]] : [])) as SourceVM[];
 
 export const indexVMs = (vms: SourceVM[]): IndexedSourceVMs => {
+  console.log(`indexing ${vms.length} VMs`, performance.now());
   const sortedVMs = sortByName(vms.filter((vm) => !(vm as IVMwareVM).isTemplate));
+  console.log('after sort', performance.now());
   const vmsById: SourceVMsRecord = {};
   const vmsBySelfLink: SourceVMsRecord = {};
   sortedVMs.forEach((vm) => {
     vmsById[vm.id] = vm;
     vmsBySelfLink[vm.selfLink] = vm;
   });
+  console.log('after loop', performance.now());
   return {
     vms: sortedVMs,
     vmsById,
@@ -49,6 +52,8 @@ export const useSourceVMsQuery = (
       enabled: !!provider,
       refetchInterval: usePollingContext().refetchInterval,
       select: indexVMs,
+      // refetchOnWindowFocus: false,
+      // refetchOnMount: false
     },
     mockVMs
   );
