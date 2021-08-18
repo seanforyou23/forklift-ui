@@ -137,7 +137,6 @@ export const useConfigureHostsMutation = (
 > => {
   const client = useAuthorizedK8sClient();
   const queryClient = useQueryClient();
-  const { pollFasterAfterMutation } = usePollingContext();
 
   const configureHosts = (values: SelectNetworkFormValues) => {
     const existingHostConfigs = getExistingHostConfigs(selectedHosts, allHostConfigs, provider);
@@ -187,7 +186,6 @@ export const useConfigureHostsMutation = (
     onSuccess: () => {
       queryClient.invalidateQueries('hosts');
       queryClient.invalidateQueries('hostconfigs');
-      pollFasterAfterMutation();
       onSuccess && onSuccess();
     },
   });
