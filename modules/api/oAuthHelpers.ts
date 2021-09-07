@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { AuthorizationCode } = require('simple-oauth2');
-const fetch = require('node-fetch');
-// import { AuthorizationCode } from 'simple-oauth2';
-// import fetch from 'node-fetch';
+// const { AuthorizationCode } = require('simple-oauth2');
+// const fetch = require('node-fetch');
+import { AuthorizationCode } from 'simple-oauth2';
+import fetch from 'node-fetch';
 
 let cachedOAuthMeta: any = null;
 
-const getOAuthMeta = async (meta) => {
+const getOAuthMeta = async (meta: any) => {
   if (cachedOAuthMeta) {
     return cachedOAuthMeta;
   }
@@ -16,7 +16,7 @@ const getOAuthMeta = async (meta) => {
   return cachedOAuthMeta;
 };
 
-export const getClusterAuth = async (meta) => {
+export const getClusterAuth = async (meta: any) => {
   const oAuthMeta = await getOAuthMeta(meta);
   return new AuthorizationCode({
     client: {
@@ -30,6 +30,6 @@ export const getClusterAuth = async (meta) => {
   });
 };
 
-module.exports = {
-  getClusterAuth,
-};
+// module.exports = {
+//   getClusterAuth,
+// };

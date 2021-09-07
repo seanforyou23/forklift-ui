@@ -6,6 +6,8 @@ export DEBUG=1
 export EXPRESS_PORT=9001
 export NODE_TLS_REJECT_UNAUTHORIZED="0"
 $(npm bin)/concurrently --names "EXPRESS,WEBPACK" -c "green.bold.inverse,blue.bold.inverse" \
-  "$_dir/run-local-express.sh --auto-reload" \
-  "$(npm bin)/webpack serve \
-    --color --config=$_dir/../config/webpack.dev.js"
+  "$(npm bin)/yarn start:api:dev:remote" \
+  "$(npm bin)/yarn start:ui:dev:remote"
+  # "$_dir/run-local-express.sh --auto-reload" \
+  # "$(npm bin)/webpack serve \
+    # --color --config=$_dir/../config/webpack.dev.js"

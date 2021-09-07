@@ -2,23 +2,27 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": ".",
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "sourceMap": true,
+    "noImplicitAny": false,
+    "strict": false,
     "target": "ES6",
-    "allowJs": true,
-    "checkJs": false,
+    // "allowJs": true,
+    // "checkJs": false,
     "esModuleInterop": true,
+    // "importHelpers": true,
     "skipLibCheck": true
   },
   "ts-node": {
     "files": true,
   },
   "files": [
-    "./deploy/server.ts",
+    "./server.ts",
+    "./types.d.ts"
   ],
   "include": [
-    "./deploy/server.ts",
+    "./server.ts",
   ],
-  "exclude": ["node_modules", "qe-tests", "dist"]
+  "exclude": ["node_modules", "dist", "../../config"]
 }

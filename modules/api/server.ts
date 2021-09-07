@@ -6,9 +6,10 @@ import { readFileSync } from 'fs';
 import dayjs from 'dayjs';
 import { renderFile } from 'ejs';
 
-import helpers from '../config/helpers';
+import helpers from '../../config/helpers.js';
 import { getClusterAuth } from './oAuthHelpers';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+
 interface IProxyConfigObj {
   target: string;
   changeOrigin: boolean;
@@ -49,6 +50,7 @@ if (process.env['DATA_SOURCE'] !== 'mock') {
       const authorizationUri = clusterAuth.authorizeURL({
         redirect_uri: meta.oauth.redirectUrl,
         scope: meta.oauth.userScope,
+        state: 'foo'
       });
 
       res.redirect(authorizationUri);

@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
-const helpers = require('./helpers');
+const helpers = require('../../config/helpers');
 
 console.log('\nEnvironment at build time:');
 console.log(helpers.getBuildEnv());
@@ -12,7 +12,7 @@ console.log(helpers.getBuildEnv());
 module.exports = (env) => {
   return {
     entry: {
-      app: ['react-hot-loader/patch', path.resolve(__dirname, '../src/index.tsx')],
+      app: ['react-hot-loader/patch', path.resolve(__dirname, './src/index.tsx')],
     },
     module: {
       rules: [
@@ -27,24 +27,23 @@ module.exports = (env) => {
               },
             },
           ],
-          // exclude: [path.resolve(__dirname), path.resolve(__dirname, '../scripts')]
         },
         {
           test: /\.(svg|ttf|eot|woff|woff2)$/,
           // only process modules with this loader
           // if they live under a 'fonts' or 'pficon' directory
           include: [
-            path.resolve(__dirname, '../node_modules/patternfly/dist/fonts'),
+            path.resolve(__dirname, './node_modules/patternfly/dist/fonts'),
             path.resolve(
               __dirname,
-              '../node_modules/@patternfly/react-core/dist/styles/assets/fonts'
+              './node_modules/@patternfly/react-core/dist/styles/assets/fonts'
             ),
             path.resolve(
               __dirname,
-              '../node_modules/@patternfly/react-core/dist/styles/assets/pficon'
+              './node_modules/@patternfly/react-core/dist/styles/assets/pficon'
             ),
-            path.resolve(__dirname, '../node_modules/@patternfly/patternfly/assets/fonts'),
-            path.resolve(__dirname, '../node_modules/@patternfly/patternfly/assets/pficon'),
+            path.resolve(__dirname, './node_modules/@patternfly/patternfly/assets/fonts'),
+            path.resolve(__dirname, './node_modules/@patternfly/patternfly/assets/pficon'),
           ],
           use: {
             loader: 'file-loader',
@@ -99,25 +98,25 @@ module.exports = (env) => {
         {
           test: /\.(jpg|jpeg|png|gif)$/i,
           include: [
-            path.resolve(__dirname, '../src'),
-            path.resolve(__dirname, '../node_modules/patternfly'),
-            path.resolve(__dirname, '../node_modules/@patternfly/patternfly/assets/images'),
-            path.resolve(__dirname, '../node_modules/@patternfly/react-styles/css/assets/images'),
+            path.resolve(__dirname, './src'),
+            path.resolve(__dirname, './node_modules/patternfly'),
+            path.resolve(__dirname, './node_modules/@patternfly/patternfly/assets/images'),
+            path.resolve(__dirname, './node_modules/@patternfly/react-styles/css/assets/images'),
             path.resolve(
               __dirname,
-              '../node_modules/@patternfly/react-core/dist/styles/assets/images'
+              './node_modules/@patternfly/react-core/dist/styles/assets/images'
             ),
             path.resolve(
               __dirname,
-              '../node_modules/@patternfly/react-core/node_modules/@patternfly/react-styles/css/assets/images'
+              './node_modules/@patternfly/react-core/node_modules/@patternfly/react-styles/css/assets/images'
             ),
             path.resolve(
               __dirname,
-              '../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
+              './node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
             ),
             path.resolve(
               __dirname,
-              '../node_modules/@patternfly/react-inline-edit-extension/node_modules/@patternfly/react-styles/css/assets/images'
+              './node_modules/@patternfly/react-inline-edit-extension/node_modules/@patternfly/react-styles/css/assets/images'
             ),
           ],
           use: [
@@ -136,7 +135,7 @@ module.exports = (env) => {
     },
     output: {
       filename: '[name].bundle.js',
-      path: path.resolve(__dirname, '../dist'),
+      path: path.resolve(__dirname, './dist'),
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -144,7 +143,7 @@ module.exports = (env) => {
           ? {
               // In dev and mock-prod modes, populate window._meta and window._env at build time
               filename: 'index.html',
-              template: path.resolve(__dirname, '../src/index.html.ejs'),
+              template: path.resolve(__dirname, './src/index.html.ejs'),
               templateParameters: {
                 _meta: helpers.sanitizeAndEncodeMeta(helpers.getDevMeta()),
                 _env: helpers.getEncodedEnv(),
@@ -154,19 +153,19 @@ module.exports = (env) => {
           : {
               // In real prod mode, populate window._meta and window._env at run time with express
               filename: 'index.html.ejs',
-              template: `!!raw-loader!${path.resolve(__dirname, '../src/index.html.ejs')}`,
+              template: `!!raw-loader!${path.resolve(__dirname, './src/index.html.ejs')}`,
             }),
         favicon: path.resolve(
           __dirname,
           process.env.BRAND_TYPE === 'RedHat'
-            ? '../src/favicon-redhat.ico'
-            : '../src/favicon-konveyor.ico'
+            ? './src/favicon-redhat.ico'
+            : './src/favicon-konveyor.ico'
         ),
       }),
       new webpack.EnvironmentPlugin({
         DATA_SOURCE: 'remote',
         BRAND_TYPE: 'Konveyor',
-        NODE_ENV: 'production',
+        NODE_ENV: 'development',
       }),
     ],
     resolve: {
@@ -176,7 +175,7 @@ module.exports = (env) => {
       extensions: ['.js', '.ts', '.tsx', '.json'],
       plugins: [
         new TsconfigPathsPlugin({
-          configFile: path.resolve(__dirname, '../tsconfig.json'),
+          configFile: path.resolve(__dirname, 'tsconfig.json'),
         }),
       ],
       symlinks: false,

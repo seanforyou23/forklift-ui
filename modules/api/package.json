@@ -1,0 +1,36 @@
+{
+  "name": "forklift-api",
+  "version": "0.0.1",
+  "description": "OpenShift VM Migration api",
+  "repository": "https://github.com/konveyor/forklift-ui.git",
+  "license": "Apache",
+  "private": true,
+  "typings": "./types.d.ts",
+  "scripts": {
+    "build:api": "tsc -p ./tsconfig.api.json",
+    "print:api:config": "tsc --showConfig -p ./tsconfig.api.json",
+    "start:api:dev:remote": "npm run setup:dev:remote && npm run start",
+    "start:api": "npm run start",
+    "start": "../../scripts/run-local-express.sh --auto-reload && nodemon ./server.ts",
+    "start:remote": "DATA_SOURCE=remote npm run start",
+    "setup:dev:remote": "node --experimental-modules --trace-warnings ../../scripts/remote-dev.js"
+  },
+  "dependencies": {
+    "dayjs": "^1.10.6",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^2.0.1",
+    "node-fetch": "^3.0.0",
+    "simple-oauth2": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.7.10",
+    "@types/node-fetch": "^3.0.3",
+    "@types/simple-oauth2": "^4.1.1",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  }
+}
