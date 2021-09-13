@@ -5,7 +5,7 @@
     "outDir": "dist",
     "module": "esnext",
     "target": "es5",
-    "lib": ["es6", "dom", "es2019"],
+    "lib": ["es6", "dom", "es2019", "WebWorker"],
     "sourceMap": true,
     "jsx": "react",
     "moduleResolution": "node",

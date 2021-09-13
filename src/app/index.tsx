@@ -11,6 +11,7 @@ import {
   LocalStorageContextProvider,
   NetworkContextProvider,
 } from '@app/common/context';
+import { WorkerContextProvider } from '@app/common/context/WebWorkerContext';
 import { noop } from '@app/common/constants';
 
 const queryCache = new QueryCache();
@@ -28,13 +29,15 @@ const App: React.FunctionComponent = () => (
   <QueryClientProvider client={queryClient}>
     <PollingContextProvider>
       <LocalStorageContextProvider>
-        <NetworkContextProvider>
-          <Router getUserConfirmation={noop}>
-            <AppLayout>
-              <AppRoutes />
-            </AppLayout>
-          </Router>
-        </NetworkContextProvider>
+        <WorkerContextProvider>
+          <NetworkContextProvider>
+            <Router getUserConfirmation={noop}>
+              <AppLayout>
+                <AppRoutes />
+              </AppLayout>
+            </Router>
+          </NetworkContextProvider>
+        </WorkerContextProvider>
       </LocalStorageContextProvider>
     </PollingContextProvider>
     {process.env.NODE_ENV !== 'test' ? <ReactQueryDevtools /> : null}

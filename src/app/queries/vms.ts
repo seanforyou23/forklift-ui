@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { usePollingContext } from '@app/common/context';
+import { WorkerContext } from '@app/common/context/WebWorkerContext';
 import { UseQueryResult } from 'react-query';
 import { useAuthorizedFetch } from './fetchHelpers';
 import { useMockableQuery, getInventoryApiUrl, sortByName } from './helpers';
@@ -38,9 +39,15 @@ export const indexVMs = (vms: SourceVM[]): IndexedSourceVMs => {
 };
 
 export const useSourceVMsQuery = (
-  provider: SourceInventoryProvider | null
+  provider: SourceInventoryProvider | null,
 ): UseQueryResult<IndexedSourceVMs> => {
-  const indexVmsCallback = React.useCallback((data) => indexVMs(data), []);
+  const workerContext = React.useContext(WorkerContext);
+  const indexVmsCallback = React.useCallback((data) => {
+    // TODO
+    workerContext.worker?.postMessage(data);
+    return indexVMs(data);
+  }, []);
+
   let mockVMs: SourceVM[] = [];
   if (provider?.type === 'vsphere') mockVMs = MOCK_VMWARE_VMS;
   if (provider?.type === 'ovirt') mockVMs = MOCK_RHV_VMS;
