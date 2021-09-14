@@ -1,16 +1,20 @@
+import { SourceVM, IVMwareVM, SourceVMsRecord } from '@app/queries/types/vms.types';
+import { IndexedSourceVMs } from '@app/queries';
+
 onmessage = (e) => {
 
-  const findVMsInRecord = (record, keys) => keys.flatMap((key) => (record[key] ? [record[key]] : []));
+  const findVMsInRecord = (record: SourceVMsRecord, keys: string[]) =>
+    keys.flatMap((key) => (record[key] ? [record[key]] : [])) as SourceVM[];
 
   const sortByName = (data) => {
     const getName = (obj) => obj.name || obj.metadata?.name || '';
     return (data || []).sort((a, b) => (getName(a) < getName(b) ? -1 : 1));
   };
 
-  const indexVMs = (vms) => {
-    const sortedVMs = sortByName(vms.filter((vm) => !(vm).isTemplate));
-    const vmsById = {};
-    const vmsBySelfLink = {};
+  const indexVMs = (vms: SourceVM[]): IndexedSourceVMs => {
+    const sortedVMs = sortByName(vms.filter((vm) => !(vm as IVMwareVM).isTemplate));
+    const vmsById: SourceVMsRecord = {};
+    const vmsBySelfLink: SourceVMsRecord = {};
     sortedVMs.forEach((vm) => {
       vmsById[vm.id] = vm;
       vmsBySelfLink[vm.selfLink] = vm;
@@ -32,6 +36,4 @@ onmessage = (e) => {
     vmsBySelfLink: finalResult.vmsBySelfLink
   });
 
-  // const resultBuff = new ArrayBuffer(finalResult);
-  // postMessage(resultBuff, [resultBuff]);
 }

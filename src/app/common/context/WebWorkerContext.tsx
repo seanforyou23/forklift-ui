@@ -19,7 +19,7 @@ export const WorkerContextProvider: React.FunctionComponent<IWorkerContextProvid
 }: IWorkerContextProviderProps) => {
   const [isWorkerEnabled, setIsWorkerEnabled] = React.useState(true);
 
-  const [worker] = React.useState(window.Worker ? new Worker(new URL('../../Plans/components/Wizard/vms.worker.js', import.meta.url)) : undefined);
+  const [worker] = React.useState(window.Worker ? new Worker(new URL('../../Plans/components/Wizard/vms.worker.ts', import.meta.url)) : undefined);
 
   React.useEffect(() => {
 

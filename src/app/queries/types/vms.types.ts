@@ -43,3 +43,5 @@ export interface IRHVVM extends IBaseSourceVM {
 }
 
 export type SourceVM = IVMwareVM | IRHVVM;
+
+export type SourceVMsRecord = Record<string, SourceVM | undefined>;

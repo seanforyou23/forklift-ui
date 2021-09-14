@@ -6,9 +6,7 @@ import { useAuthorizedFetch } from './fetchHelpers';
 import { useMockableQuery, getInventoryApiUrl, sortByName } from './helpers';
 import { MOCK_RHV_VMS, MOCK_VMWARE_VMS } from './mocks/vms.mock';
 import { SourceInventoryProvider } from './types';
-import { SourceVM, IVMwareVM } from './types/vms.types';
-
-type SourceVMsRecord = Record<string, SourceVM | undefined>;
+import { SourceVM, IVMwareVM, SourceVMsRecord } from './types/vms.types';
 
 export interface IndexedSourceVMs {
   vms: SourceVM[];
@@ -42,7 +40,7 @@ export const useSourceVMsQuery = (
   provider: SourceInventoryProvider | null,
 ): UseQueryResult<IndexedSourceVMs> => {
   const workerContext = React.useContext(WorkerContext);
-  const indexVmsCallback = React.useCallback((data) => {
+  const indexVmsCallback = React.useCallback((data: SourceVM[]) => {
     // TODO
     workerContext.worker?.postMessage(data);
     return indexVMs(data);
